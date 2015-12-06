@@ -1,18 +1,11 @@
 (ns clcl-checklist.core
   (:require [clcl.action.add-comment :as c]
-            [clcl.util :as u]
-            [clojure.java.io :as io]
-            [clojure.tools.logging :as log]))
-
-(defn- safe-slurp [file-path]
-  (try (slurp file-path)
-       (catch java.io.FileNotFoundException e
-         (log/error (format "%s is not found." file-path)))))
+            [clcl.util :as u]))
 
 (defn- body []
-  (let [file-path (or (u/env "checklist-file-path")
+  (let [file-path (or (u/env "CHECKLIST_FILE_PATH")
                       "CONTRIBUTING.md")]
-    (safe-slurp file-path)))
+    (u/safe-slurp file-path)))
 
 (defn add-checklist [file-path payload option]
   (if-let [b (body)]
